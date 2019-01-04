@@ -42,7 +42,7 @@ public class SalvoApplication {
 			//Game gameThree = new Game(date);
 
 			player1.addGamePlayer(readyPlayerOne);
-			player2.addGamePlayer(readyPlayerTwo);
+			player3.addGamePlayer(readyPlayerTwo);
 
 			gameOne.addGamePlayer(readyPlayerOne);
 			gameOne.addGamePlayer(readyPlayerTwo);
@@ -55,15 +55,23 @@ public class SalvoApplication {
 			gameTwo.addGamePlayer(readyPlayerThree);
 
 
-			List<String> location1 = Arrays.asList("A1", "A2", "A3");
+			List<String> location1 = Arrays.asList("E1", "F2", "G3", "H4", "I5" );
 			List<String> location2 = Arrays.asList("B1", "B2", "B3");
 
-			Ship destroyer = new Ship("Destroyer", location1);
+			List<String> location3 = Arrays.asList("E1", "F1", "G1", "H1", "I1" );
+			List<String> location4 = Arrays.asList("C1", "C2", "C3");
+
+			Ship destroyer = new Ship("Fregatte", location1);
 			Ship destroyerTwo = new Ship("Destroyer", location2);
+
+			Ship destroyerThree = new Ship("Fregatte", location3);
+			Ship destroyerFour = new Ship("Destroyer", location4);
 
 			readyPlayerOne.addShip(destroyer);
 			readyPlayerOne.addShip(destroyerTwo);
 
+			readyPlayerTwo.addShip(destroyerThree);
+			readyPlayerTwo.addShip(destroyerFour);
 
 
 			repositoryGame.save(gameOne);
@@ -83,6 +91,8 @@ public class SalvoApplication {
 
 			shipRepository.save(destroyer);
 			shipRepository.save(destroyerTwo);
+			shipRepository.save(destroyerThree);
+			shipRepository.save(destroyerFour);
 		};
 
 	}
