@@ -13,6 +13,8 @@ const final = url + urlParams[1];
 //console.log(urlParams[1]);
 document.getElementById("tableOne").id = `table${urlParams[1]}`
 createTable(`table${urlParams[1]}`);
+
+createTableTwo("tableTwo");
 //console.log(`table${urlParams[1]}`);
 console.log("idchanged");
 
@@ -23,6 +25,8 @@ fetch(final)
     data = result
     console.log(data.ships[0].ship_location)
     insertShips(data.ships);
+    insertSalvosOpponents(data.salvoesOpponents);
+    insertSalvos(data.salvoes);
     parseNames(data)
 
 
@@ -104,8 +108,75 @@ function insertShips(ships) {
 
     for (let i = 0; i < ships.length; i++) { //2
          for (let n = 0; n < ships[i].ship_location.length; n++) { //3
-                 document.getElementsByClassName(ships[i].ship_location[n])[0].classList.add("red")
+                 document.getElementsByClassName(ships[i].ship_location[n])[0].classList.add("blue")
          }
+    }
+}
+
+function createTableTwo(tableId) {
+
+            let rows = [" ", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10"];
+            let columns = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J"]
+            let table = document.getElementById(tableId);
+            let tablehead = document.createElement("thead");
+            let tablebody = document.createElement("tbody");
+
+            let rowF = " ";
+            let shipCol = "";
+
+
+
+            if (table == document.getElementById("tableTwo")) {
+            console.log("tableCreated")
+
+                for (let i = 0; i < rows.length; i++) {
+
+                    rowF += `
+                                <th>${rows[i]}</th>
+                            `
+                }
+
+                table.appendChild(tablehead).innerHTML = rowF;
+
+                for (let c = 0; c < columns.length; c++) {
+
+                    shipCol += `<tr >
+                            <td>${columns[c]}</td>
+                            <td class="S${columns[c]}1" ></td>
+                            <td class="S${columns[c]}2"></td>
+                            <td class="S${columns[c]}3"></td>
+                            <td class="S${columns[c]}4"></td>
+                            <td class="S${columns[c]}5"></td>
+                            <td class="S${columns[c]}6"></td>
+                            <td class="S${columns[c]}7"></td>
+                            <td class="S${columns[c]}8"></td>
+                            <td class="S${columns[c]}9"></td>
+                            <td class="S${columns[c]}10"></td>
+                        </tr>`
+                }
+                table.appendChild(tablebody).innerHTML = shipCol;
+
+            }
+}
+
+console.log(urlParams[1]);
+
+
+
+
+function insertSalvosOpponents(salvoesOpponents) {
+
+    for (let i = 0; i < salvoesOpponents.length; i++) {
+                 document.getElementsByClassName(salvoesOpponents[i].salvo_location)[0].classList.add("red")
+
+    }
+}
+
+function insertSalvos(salvoes) {
+
+    for (let i = 0; i < salvoes.length; i++) {
+                 document.getElementsByClassName("S" + salvoes[i].salvo_location)[0].classList.add("green")
+
     }
 }
 

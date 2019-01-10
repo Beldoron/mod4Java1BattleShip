@@ -51,9 +51,18 @@ public class SalvoController {
         findgameplayer.put("gameplayerid",gamePlayer.getGamePlayerId());
         findgameplayer.put("gameplayers", gamePlayerSet(gamePlayer.getGame().getGamePlayers()));
         findgameplayer.put("ships", shipSet(gamePlayer.getShips()));
-
+        findgameplayer.put("salvoes", salvoSet(gamePlayer.getSalvos()));
+        findgameplayer.put("salvoesOpponents", salvoSet(gamePlayer.getOpponentsSalvoes(gamePlayer)));
 
         return findgameplayer;
+    }
+
+    private Map<String, Object> salvoesMap(Salvo salvo) {
+        Map<String, Object> salvomap = new LinkedHashMap<String, Object>();
+        salvomap.put("gameplayer_id", salvo.getGamePlayer().getPlayer().getPlayerId());
+        salvomap.put("turnNumber", salvo.getTurnNumber());
+        salvomap.put("salvo_location", salvo.getLocation());
+        return salvomap;
     }
 
     private Map<String, Object> gameplayerMap(GamePlayer gamePlayer) {
@@ -83,6 +92,10 @@ public class SalvoController {
 
     private List<Map<String, Object>> shipSet (Set<Ship> ships) {
         return ships.stream().map(ship-> shipsMap(ship)).collect(toList());
+    }
+
+    private List<Map<String, Object>> salvoSet (Set<Salvo> salvoes) {
+        return salvoes.stream().map(salvo-> salvoesMap(salvo)).collect(toList());
     }
 
 }

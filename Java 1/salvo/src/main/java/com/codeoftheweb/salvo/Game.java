@@ -64,6 +64,16 @@ public class Game {
         return playersSet;
     }
 
+    public GamePlayer getOpponent(GamePlayer currentGamePlayer) {
+        for (GamePlayer otherGamePlayer: this.gamePlayers) {
+            if (currentGamePlayer.getGamePlayerId() != otherGamePlayer.getGamePlayerId()) {
+                return otherGamePlayer;
+            }
+        }
+        return null;
+    }
+
+
     public void setPlayerId(long id) {
         this.id = id;
     }
