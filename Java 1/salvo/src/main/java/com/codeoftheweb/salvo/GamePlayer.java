@@ -70,6 +70,9 @@ public class GamePlayer {
         }
 
 
+
+
+
         public Set<Salvo> getOpponentsSalvoes(GamePlayer gamePlayer) {
                 if (this.getGame().getOpponent(gamePlayer) != null) {
                         return this.getGame().getOpponent(gamePlayer).getSalvos();
@@ -101,6 +104,22 @@ public class GamePlayer {
         return  " Player : " + player + " played at :" +  game ;
         }
 }
+
+/*
+
+        public LinkedHashMap<String, Object> getScoreInGame(Game game){
+
+                return player.getScores()
+                        .stream().filter(score -> game.equals(score.getGame()))
+                        .map(score -> new LinkedHashMap<String, Object>(){{
+                                put("id", score.getScoreId());
+                                put("scorePoint", score.getScore());
+
+                        }})
+                        .findFirst()
+                        .orElse(null);
+        }
+ */
 
 
 

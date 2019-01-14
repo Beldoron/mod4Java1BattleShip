@@ -19,6 +19,8 @@ public class SalvoController {
     private GameRepository gameRepository;
     @Autowired
     private GamePlayerRepository gamePlayerRepository;
+    @Autowired
+    private PlayerRepository playerRepository;
 
     @RequestMapping("/games")
     public List<Map<String, Object>> getAll() {
@@ -35,6 +37,47 @@ public class SalvoController {
         }}).collect(toList());
 
     }
+
+    @RequestMapping("/leader_board")
+    public  List<Map<String, Object>> getScores () {
+       return playerRepository.findAll().stream().map(player -> new HashMap<String, Object>(){{
+            put("user_Name", player.getUserName());
+            put("wins", getWins(player));
+            put("lost", getLost(player));
+            put("tide", getTide(player));
+        }}).collect(toList());
+    }
+
+
+
+    private long getWins (Player player) {
+//        int wins = 0;
+ /*       player.getScores().stream().forEach(score -> {
+
+            if(score.getPlayersScores() == 1) {
+                wins ++;
+            }
+        });*/
+        return player.getScores().stream().filter(score -> score.getPlayersScores() == 1).count();
+//        return  wins;
+    }
+
+    private  long getLost (Player player) {
+        return player.getScores().stream().filter(score -> score.getPlayersScores() == 0).count();
+    }
+    private  long getTide (Player player) {
+        return player.getScores().stream().filter(score -> score.getPlayersScores() == 0.5).count();
+    }
+/*
+    @RequestMapping("/leader_board")
+    public List<Map<String, Object>> getScores() {
+        return playerRepository.findAll().stream().map(player -> new HashMap<String, Object>(){{
+                put("player_ID", player.getPlayerId());
+                put("user_Name", player.getUserName());
+                put("scores", player.getScores());
+            }}).collect(toList());
+    }
+*/
 
     @RequestMapping("/game_view/{nn}")
     public Map<String, Object> findGamePlayer(@PathVariable Long nn) {

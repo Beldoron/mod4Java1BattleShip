@@ -18,7 +18,7 @@ public class SalvoApplication {
 	}
 
 	@Bean
-	public CommandLineRunner initData(GameRepository repositoryGame, PlayerRepository repositoryPlayer, GamePlayerRepository gamePlayerRepository, ShipRepository shipRepository, SalvoRepository salvoRepository) {
+	public CommandLineRunner initData(GameRepository repositoryGame, PlayerRepository repositoryPlayer, GamePlayerRepository gamePlayerRepository, ShipRepository shipRepository, SalvoRepository salvoRepository, ScoresRepository scoresRepository) {
 		return (args) -> {
 
 			Player player1 = new Player("jack@gmx.de");
@@ -27,8 +27,9 @@ public class SalvoApplication {
 
 
 			Date date = new Date();
-			Date dateTwo = Date.from(date.toInstant().plusSeconds(3600));
-			Date dateThree = Date.from(date.toInstant().plusSeconds(7200));
+			Date dateTwo = Date.from(date.toInstant().plusSeconds(1800));
+			//System.out.println(dateTwo);
+
 
 			GamePlayer readyPlayerOne = new GamePlayer(date);
 			GamePlayer readyPlayerTwo = new GamePlayer(date);
@@ -40,6 +41,39 @@ public class SalvoApplication {
 			Game gameOne = new Game(date);
 			Game gameTwo = new Game(dateTwo);
 			//Game gameThree = new Game(date);
+			// nur creationdateDate und Score, player in scores relation
+
+			Score scoreOne = new Score(1.0, dateTwo);
+			Score scoreTwo = new Score(0.5, dateTwo);
+			Score scoreThree = new Score(0.0, dateTwo);
+			Score scoreFour = new Score(0.0, dateTwo);
+			Score scoreFive = new Score(1.0, dateTwo);
+			Score scoreSix = new Score(1.0, dateTwo);
+			Score scoreSeven = new Score(0.5, dateTwo);
+			Score scoreEight = new Score(0.5, dateTwo);
+			Score scoreNine = new Score(0.5, dateTwo);
+			Score scoreTen = new Score(1.0, dateTwo);
+			Score scoreEleven = new Score(1.0, dateTwo);
+
+
+			player1.addPlayer(scoreTwo);
+			player1.addPlayer(scoreOne);
+			player1.addPlayer(scoreThree);
+			player1.addPlayer(scoreFour);
+			player2.addPlayer(scoreFive);
+			player2.addPlayer(scoreSix);
+			player2.addPlayer(scoreSeven);
+			player2.addPlayer(scoreEight);
+			player3.addPlayer(scoreNine);
+			player3.addPlayer(scoreTen);
+			player3.addPlayer(scoreEleven);
+			//player1.addPlayer(scoreOne);
+
+			//System.out.println(scoreOne);
+			//System.out.println(scoreOne);
+
+			gameOne.addScore(scoreOne);
+			gameOne.addScore(scoreTwo);
 
 			player1.addGamePlayer(readyPlayerOne);
 			player3.addGamePlayer(readyPlayerTwo);
@@ -143,6 +177,18 @@ public class SalvoApplication {
 			salvoRepository.save(turnEight);
 			salvoRepository.save(turnNine);
 			salvoRepository.save(turnTen);
+
+			scoresRepository.save(scoreOne);
+			scoresRepository.save(scoreTwo);
+			scoresRepository.save(scoreThree);
+			scoresRepository.save(scoreFour);
+			scoresRepository.save(scoreFive);
+			scoresRepository.save(scoreSix);
+			scoresRepository.save(scoreSeven);
+			scoresRepository.save(scoreEight);
+			scoresRepository.save(scoreNine);
+			scoresRepository.save(scoreTen);
+			scoresRepository.save(scoreEleven);
 		};
 
 	}

@@ -19,6 +19,10 @@ public class Player {
     @OneToMany(mappedBy="player", fetch=FetchType.EAGER)
     Set<GamePlayer> gamePlayers = new HashSet<>();
 
+
+    @OneToMany(mappedBy="player", fetch= FetchType.EAGER)
+    Set<Score> scores = new HashSet<>();
+
     private String userName;
 
 
@@ -30,7 +34,28 @@ public class Player {
         this.userName = email;
     }
 
-    public void addGamePlayer(GamePlayer gamePlayer) {
+
+
+    public Set<Score> getScores() {
+        if(scores != null) {
+            return scores;
+        }
+        return null;
+    }
+
+    public void setScores(Set<Score> scores) {
+        this.scores = scores;
+    }
+
+    public void addPlayer(Score score) {
+        score.setPlayer(this);
+        scores.add(score);
+    }
+
+
+
+
+        public void addGamePlayer(GamePlayer gamePlayer) {
         gamePlayer.setPlayer(this);
         gamePlayers.add(gamePlayer);
     }
@@ -61,6 +86,8 @@ public class Player {
     public String toString() {
         return  " the Username is " + userName;
     }
+
+
 }
 
 

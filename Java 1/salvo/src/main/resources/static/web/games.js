@@ -1,17 +1,11 @@
-//import React from 'react';
+
 
 
 console.log("Fuba");
 
-/*fetch('http://localhost:8080/api/games')
-  .then(function(response) {
-    return response.json();
-  })
-  .then(function(myJson) {
-    console.log(JSON.stringify(myJson));
-  })*/
 
 let tableArr = []
+let scores = []
 
 fetch('http://localhost:8080/api/games')
 .then(result => result.json())
@@ -20,8 +14,116 @@ fetch('http://localhost:8080/api/games')
     tableArr = result
 
     tryIt(tableArr)
-})
-;
+});
+
+fetch('http://localhost:8080/api/leader_board')
+.then(result => result.json())
+.then(result => {
+    console.log(result)
+    scores = result
+
+    tryTwo(scores)
+
+
+});
+
+
+function tryIt (element){
+
+    const test = element.map(el => `
+                <tr>
+                    <td> the game </td>
+                    <td>${el.crationDate}</td>
+                    <td> is played by </td>
+                    <td>${el.gameplayer.map(fuba =>
+                            fuba.player.email
+                            )}</td>
+
+                </tr>
+                `).join("")
+
+    document.querySelector("#myTable").innerHTML = test
+ };
+
+
+ function tryTwo (element) {
+
+ const t = element.map (el =>
+
+
+     `
+
+     <tr>
+              <td>${el.user_Name} </td>
+              <td>${el.wins + el.tide + el.lost}</td>
+              <td>${el.wins} </td>
+              <td>${el.tide} </td>
+              <td>${el.lost} </td>
+      <tr>
+      `).join("")
+      document.querySelector("#myTableTwo").innerHTML = t
+
+
+ }
+/*
+function tryTwo (element) {
+
+    console.log(element[0].scores)
+    console.log(element[0].scores[1].playersScores)
+        let won = 0;
+        let tied = 0;
+        let lost = 0;
+
+        let `${element[i].user_Name}`
+
+
+    for (var i = 0; i < element.length; i++) {
+
+
+        for (var n = 0; n < element[i].scores.length; n++) {
+            if (element[i].scores[n].playersScores == 1) {
+                won += 1;
+            } else if ( element[i].scores[n].playersScores == 0.5) {
+                tied += 1;
+            } else{
+                lost +=1;
+            }
+
+
+
+        }
+        //let forEachPlayer = `${element[i].user_Name} won ` + won + " times"
+        //console.log(forEachPlayer)
+
+    }
+
+  console.log(won)
+  console.log(lost)
+  console.log(tied)
+
+
+
+
+
+    const t = element.map (el =>
+    `<tr>
+             <td>${el.user_Name} </td
+     <tr>
+     `).join("")
+     document.querySelector("#myTableTwo").innerHTML = t
+
+}
+
+
+
+*/
+
+
+
+
+
+
+
 
 /*console.log("testOne")
 console.log(tableArr);
@@ -67,22 +169,6 @@ for (let row of tableArr) {
 document.body.appendChild(table);
 }*/
 
-function tryIt (element){
-
-    const test = element.map(el => `
-                <tr>
-                    <td> the game </td>
-                    <td>${el.crationDate}</td>
-                    <td> is played by </td>
-                    <td>${el.gameplayer.map(fuba =>
-                            fuba.player.email
-                            )}</td>
-
-                </tr>
-                `).join("")
-
-    document.querySelector("#myTable").innerHTML = test
- };
 
 
 
@@ -91,7 +177,7 @@ function tryIt (element){
 
 
 
-
+/*
 
 function makeTableHTML (array) {
     console.log(array)
@@ -110,7 +196,7 @@ function makeTableHTML (array) {
     return table;
 }
 
-
+*/
 
 
 
@@ -134,3 +220,10 @@ function makeTableHTML(x) {
 */
 
 
+/*fetch('http://localhost:8080/api/games')
+  .then(function(response) {
+    return response.json();
+  })
+  .then(function(myJson) {
+    console.log(JSON.stringify(myJson));
+  })*/
