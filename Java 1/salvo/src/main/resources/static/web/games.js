@@ -7,14 +7,38 @@ console.log("Fuba");
 let tableArr = []
 let scores = []
 
+function fetching () {
 fetch('http://localhost:8080/api/games')
 .then(result => result.json())
 .then(result => {
     console.log(result)
     tableArr = result
-
+    console.log("test")
+    reloadHide()
     tryIt(tableArr)
+
+    })
+};
+
+fetch('http://localhost:8080/api/games')
+.then(result => result.json())
+.then(result => {
+    console.log(result)
+    tableArr = result
+    console.log("test ohne")
+    reloadHide()
+    tryIt(tableArr)
+
+ if(tableArr.Active_User.userName != null){
+       reloadHide();
+       myAuthentication();
+     }
+
 });
+
+
+// <button onclick="reloadHide()">sdf</button>
+
 
 fetch('http://localhost:8080/api/leader_board')
 .then(result => result.json())
@@ -25,12 +49,169 @@ fetch('http://localhost:8080/api/leader_board')
     tryTwo(scores)
 
 
+
 });
+
+
+
+    //    if(scores.Active_User.userName != null){
+    //    reloadHide();
+     //   }
+//console.log(scores.Active_User.userName)
+
+//console.log("BOOOOOOB")
+
+function login() {
+
+
+
+  var pw = document.getElementById("password").value;
+  var mail = document.getElementById("email").value;
+  console.log(mail)
+  console.log(pw)
+
+  fetch('http://localhost:8080/api/login', {
+       credentials:'include',
+      headers: {
+      "Accept": "application/json",
+      "Content-Type": "application/x-www-form-urlencoded"
+      },
+      method: 'POST',
+      body: `email=${mail}&password=${pw}`
+    }).then(res => {
+        console.log(res);
+
+        if(res.ok) {
+
+            return;
+        }
+        throw Error("big error");
+    }).then(json => {
+        fetching()
+        console.log(json);
+        myAuthentication();
+        myName(mail);
+
+    }).catch(err => {
+        console.log(err);
+    })
+
+}
+
+//function myName(element) {
+//document.getElementById("`${element.Active_User.userName}`").innerHTML = element;
+//}
+
+function myAuthentication() {
+  var x = document.getElementById("myAuthentication");
+  if (x.style.display === "none") {
+    x.style.display = "block";
+  } else {
+    x.style.display = "none";
+  }
+}
+
+function reloadHide() {
+  var x = document.getElementById("logs");
+
+  if (x.style.display === "none") {
+    x.style.display = "block";
+  } else {
+    x.style.display = "none";
+  }
+}
+
+//function logref (){
+//var y = document.getElementById("myAuthentication");
+
+//}
+
+function reload() {
+location.reload();
+}
+
+
+
+function logout() {
+
+
+
+  fetch('http://localhost:8080/api/logout', {
+       credentials:'include',
+      headers: {
+      "Accept": "application/json",
+      "Content-Type": "application/x-www-form-urlencoded"
+      },
+      method: 'POST',
+      body: ""
+    }).then(result =>  {
+        console.log(result)
+        location.reload();
+        return result.json()})
+      .then(result => {
+      console.log(result)
+
+    })
+}
+
+function register () {
+  var pw = document.getElementById("password").value;
+  var mail = document.getElementById("email").value;
+  fetch('http://localhost:8080/api/players', {
+       credentials:'include',
+      headers: {
+      "Accept": "application/json",
+      "Content-Type": "application/x-www-form-urlencoded"
+      },
+      method: 'POST',
+      body: `email=${mail}&password=${pw}`
+    }).then(result =>  {
+        console.log(result)
+        login();
+        return result.json()})
+
+}
+
+/*
+
+  console.log(mail)
+  console.log(pw)
+
+  fetch('http://localhost:8080/api/login', {
+       credentials:'include',
+      headers: {
+      "Accept": "application/json",
+      "Content-Type": "application/x-www-form-urlencoded"
+      },
+      method: 'POST',
+      body: `email=${mail}&password=${pw}`
+    }).then(res => {
+        console.log(res);
+
+        if(res.ok) {
+
+            return;
+        }
+        throw Error("big error");
+    }).then(json => {
+        fetching()
+        console.log(json);
+        document.getElementById("logs").style.display = "none";
+        myAuthentication();
+        myName(mail);
+
+    }).catch(err => {
+        console.log(err);
+    })
+*/
+
+
+
 
 
 function tryIt (element){
 
-    const test = element.map(el => `
+    const test = element.games.map(el => `
                 <tr>
                     <td> the game </td>
                     <td>${el.crationDate}</td>

@@ -31,6 +31,53 @@ fetch(final)
 
 
 })
+fetching();
+
+function fetching () {
+fetch('http://localhost:8080/api/games')
+.then(result => result.json())
+.then(result => {
+    console.log(result)
+    userInfo = result
+    myLogin(userInfo);
+
+});
+}
+
+function logout() {
+
+  fetch('http://localhost:8080/api/logout', {
+       credentials:'include',
+      headers: {
+      "Accept": "application/json",
+      "Content-Type": "application/x-www-form-urlencoded"
+      },
+      method: 'POST',
+      body: ""
+    }).then(result =>  {
+        console.log(result)
+        window.location.assign("http://localhost:8080/web/games.html");
+
+        return})
+}
+
+function back() {
+window.location.assign("http://localhost:8080/web/games.html");
+}
+
+
+
+
+
+
+
+function myLogin(element){
+document.getElementById('myLogin').innerHTML = element.Active_User.userName;
+}
+
+function reload() {
+location.reload();
+}
 
 
 function parseNames(data) {

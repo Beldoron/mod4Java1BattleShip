@@ -1,11 +1,26 @@
 package com.codeoftheweb.salvo;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.authentication.configurers.GlobalAuthenticationConfigurerAdapter;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.core.authority.AuthorityUtils;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.web.WebAttributes;
+import org.springframework.security.web.authentication.logout.HttpStatusReturningLogoutSuccessHandler;
 
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
@@ -17,13 +32,18 @@ public class SalvoApplication {
 		SpringApplication.run(SalvoApplication.class, args);
 	}
 
+
+
+
+
 	@Bean
 	public CommandLineRunner initData(GameRepository repositoryGame, PlayerRepository repositoryPlayer, GamePlayerRepository gamePlayerRepository, ShipRepository shipRepository, SalvoRepository salvoRepository, ScoresRepository scoresRepository) {
 		return (args) -> {
 
-			Player player1 = new Player("jack@gmx.de");
-			Player player2 = new Player("bauer@gmx.de");
-			Player player3 = new Player("jan@gmx.de");
+			Player player1 = new Player("jack@gmx.de",  "1234");
+			Player player2 = new Player("bauer@gmx.de",  "wetter");
+			Player player3 = new Player("jan@gmx.de",  "miau");
+			Player player4 = new Player("j.bauer@ctu.gov",  "24");
 
 
 			Date date = new Date();
@@ -155,6 +175,7 @@ public class SalvoApplication {
 			repositoryPlayer.save(player1);
 			repositoryPlayer.save(player2);
 			repositoryPlayer.save(player3);
+			repositoryPlayer.save(player4);
 
 			gamePlayerRepository.save(readyPlayerOne);
 			gamePlayerRepository.save(readyPlayerTwo);
@@ -189,8 +210,90 @@ public class SalvoApplication {
 			scoresRepository.save(scoreNine);
 			scoresRepository.save(scoreTen);
 			scoresRepository.save(scoreEleven);
+
+
+
 		};
 
+	}
+
+	@Configuration
+	class WebAuthenticationConfig extends GlobalAuthenticationConfigurerAdapter {
+
+		@Autowired
+		private PlayerRepository playerRepository;
+
+		@Override
+		public void init(AuthenticationManagerBuilder auth) throws Exception {
+			auth.userDetailsService(userName -> {
+				System.out.println(userName);
+				Player player = playerRepository.findByUserName(userName);
+				System.out.println(player);
+				if (player != null) {
+					return new User(player.getUserName(), player.getPassword(),
+							AuthorityUtils.createAuthorityList("USER"));
+				} else {
+					throw new UsernameNotFoundException("Unknown user: " + userName);
+				}
+			});
+		}
+	}
+
+	@EnableWebSecurity
+	@Configuration
+	class WebAccessConfig extends WebSecurityConfigurerAdapter {
+
+		@Override
+		protected void configure(HttpSecurity http) throws Exception {
+
+			http.authorizeRequests()
+					.antMatchers("/web/games.html").permitAll()
+					.antMatchers("/web/games.js").permitAll()
+					.antMatchers("/web/games.css").permitAll()
+					.antMatchers("/api/games").permitAll()
+					.antMatchers("/api/players").permitAll()
+					.antMatchers("/api/leader_board").permitAll()
+					.antMatchers("/api/game_view/*").permitAll()
+					.antMatchers("/api/login").permitAll()
+					.antMatchers("/api/players").permitAll()
+					.antMatchers("/web/game.html").hasAuthority("USER")
+					.antMatchers("/web/game.js").hasAuthority("USER")
+					.antMatchers("/web/game.css").hasAuthority("USER")
+					.antMatchers("/api/game_view/*").hasAuthority("USER");
+
+
+
+					//.anyRequest().fullyAuthenticated();
+
+			http.formLogin()
+					.usernameParameter("email")
+					.passwordParameter("password")
+					.loginPage("/api/login");
+
+			http.logout().logoutUrl("/api/logout");
+
+
+			http.csrf().disable();
+
+			http.exceptionHandling().authenticationEntryPoint((request, response, authentication)
+					-> response.sendError(HttpServletResponse.SC_UNAUTHORIZED));
+
+			http.formLogin().successHandler((request, response, authentication)
+					-> clearAuthenticationAttributes(request));
+
+			http.formLogin().failureHandler((request, response, exception)
+					-> response.sendError(HttpServletResponse.SC_UNAUTHORIZED));
+
+
+			http.logout().logoutSuccessHandler(new HttpStatusReturningLogoutSuccessHandler());
+		}
+
+		private void clearAuthenticationAttributes(HttpServletRequest request) {
+			HttpSession httpSession = request.getSession(false);
+			if (httpSession != null) {
+				httpSession.removeAttribute(WebAttributes.AUTHENTICATION_EXCEPTION);
+			}
+		}
 	}
 
 }

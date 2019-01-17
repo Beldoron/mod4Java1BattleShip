@@ -24,15 +24,18 @@ public class Player {
     Set<Score> scores = new HashSet<>();
 
     private String userName;
+    private String password;
 
 
 
     public Player() { }
 
-    public Player(String email) {
+    public Player(String userName, String password) {
 
-        this.userName = email;
+        this.userName = userName;
+        this.password = password;
     }
+
 
 
 
@@ -59,6 +62,15 @@ public class Player {
         gamePlayer.setPlayer(this);
         gamePlayers.add(gamePlayer);
     }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
 
     public String getUserName() {
         return userName;

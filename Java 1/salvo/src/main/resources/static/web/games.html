@@ -3,21 +3,65 @@
 <head>
     <meta charset="UTF-8">
     <title>Salvo</title>
-
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
 </head>
 <body>
-<h1>Testing</h1>
-
-<table border="1" id="myTable">
-
-</table>
 
 
-<table border="1" >
-    <tr><th>Player</th><th>Total</th><th>Wins</th><th>Tide</th><th>Lost</th></tr>
-    <tbody id="myTableTwo"></tbody>
+<div class="w3-margin-bottom w3-margin-left">
+<h1>Battle Ships</h1>
+    <div id="myAuthentication" style="display:none" class=" w3-display-topright">
 
-</table>
+        <div><button  style="margin-left:16px;" class="w3-button w3-container w3-cell w3-light-green w3-round-large"  onclick="logout()">Logout</button></div>
+    </div>
+</div>
+
+
+
+
+
+<div id="logs" style="display:none" class="w3-margin-left" >
+
+    E-mail: <input type="email" id="email" value="">
+    Password: <input type="password" id="password" value="">
+
+    <button class="w3-button w3-light-green w3-round-large" onclick="login()">Login</button>
+    <button class="w3-button w3-light-green w3-round-large" onclick="register()">Register</button>
+
+</div>
+
+
+
+<div style="margin-top:50px;" class="w3-table w3-margin-left">
+
+    <table class="w3-border w3-striped">
+        <tr class="w3-light-green"><th></th><th>Game Number</th><th></th><th>Player</th></tr>
+        <tbody id="myTable"></tbody>
+    </table>
+    <br>
+</div>
+
+<div style="margin-top:10px;" class="w3-table w3-margin-left">
+
+    <table border=1 class="w3-border w3-striped">
+
+            <tr class="w3-light-green">
+                <th>Player</th>
+                <th>Total</th>
+                <th>Wins</th>
+                <th>Tide</th>
+                <th>Lost</th>
+            </tr>
+
+        <tbody id="myTableTwo"></tbody>
+    </table>
+</div>
+
+
+
+
+
+
 
 <script src="games.js"></script>
 </body>

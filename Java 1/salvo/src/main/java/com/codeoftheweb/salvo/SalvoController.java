@@ -1,14 +1,20 @@
 package com.codeoftheweb.salvo;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.*;
 import java.util.stream.Collectors;
 
 import static java.util.stream.Collectors.toList;
+
 
 @RestController
 @RequestMapping("/api")
@@ -22,11 +28,29 @@ public class SalvoController {
     @Autowired
     private PlayerRepository playerRepository;
 
-    @RequestMapping("/games")
+
+    public Boolean userLoggedIn (Authentication authentication) {
+        if (authentication == null) {
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+    public Player currentUser(Authentication authentication) {
+        if (userLoggedIn(authentication)) {
+            return playerRepository.findByUserName(authentication.getName());
+        }
+        return null;
+    }
+
+
+
     public List<Map<String, Object>> getAll() {
+
         return gameRepository.findAll().stream().map(game -> new HashMap<String, Object>(){{
-            put("id", game.getGameId());
-            put("crationDate", game.getGameDate());
+                put("id", game.getGameId());
+                put("crationDate", game.getGameDate());
                 put("gameplayer", game.getGamePlayers().stream().map(gameplayer -> new HashMap<String, Object>(){{
                     put("id", gameplayer.getGamePlayerId());
                     put("player", new HashMap<String, Object>(){{
@@ -34,9 +58,22 @@ public class SalvoController {
                         put("email", gameplayer.getPlayer().getUserName());
                     }});
                 }}).collect(toList()));
-        }}).collect(toList());
+            }}).collect(toList());
 
     }
+
+    @RequestMapping("/games")
+    public Map<String, Object> getAll(Authentication authentication) {
+        Map<String, Object> games = new LinkedHashMap<>();
+        if (!userLoggedIn(authentication)) {
+            games.put("Active_User", null);
+        } else {
+            games.put("Active_User", currentPlayerMap(currentUser(authentication)));
+        }
+       games.put("games", getAll());
+        return games;
+    }
+
 
     @RequestMapping("/leader_board")
     public  List<Map<String, Object>> getScores () {
@@ -47,6 +84,19 @@ public class SalvoController {
             put("tide", getTide(player));
         }}).collect(toList());
     }
+
+    @RequestMapping(value="/players", method = RequestMethod.POST)
+    public ResponseEntity<Map<String, Object>> register(String email, String password) {
+        if ((email == "") || (password == "")) {
+            return new ResponseEntity<>(information("Error", "Fill out all fields"), HttpStatus.FORBIDDEN);
+        } else if (playerRepository.findByUserName(email) == null) {
+                playerRepository.save(new Player(email, password));
+                return new ResponseEntity<>(information("Success", "You are successfully Registered"), HttpStatus.CREATED);
+            } else {
+                return new ResponseEntity<>(information("Error", "User name is already used"), HttpStatus.FORBIDDEN);
+            }
+        }
+
 
 
 
@@ -79,6 +129,13 @@ public class SalvoController {
     }
 */
 
+    private Map<String, Object> information(String key, Object value) {
+        Map<String, Object> map = new HashMap<>();
+        map.put("status", key);
+        map.put("message", value);
+        return map;
+    }
+
     @RequestMapping("/game_view/{nn}")
     public Map<String, Object> findGamePlayer(@PathVariable Long nn) {
 
@@ -98,6 +155,15 @@ public class SalvoController {
         findgameplayer.put("salvoesOpponents", salvoSet(gamePlayer.getOpponentsSalvoes(gamePlayer)));
 
         return findgameplayer;
+    }
+
+
+    private Map<String, Object> currentPlayerMap(Player player) {
+        Map<String, Object> currentplayermap = new LinkedHashMap<String, Object>();
+        currentplayermap.put("playerId", player.getPlayerId());
+        currentplayermap.put("userName", player.getUserName());
+
+        return currentplayermap;
     }
 
     private Map<String, Object> salvoesMap(Salvo salvo) {
@@ -140,6 +206,10 @@ public class SalvoController {
     private List<Map<String, Object>> salvoSet (Set<Salvo> salvoes) {
         return salvoes.stream().map(salvo-> salvoesMap(salvo)).collect(toList());
     }
+
+
+
+
 
 }
 
