@@ -77,7 +77,7 @@ public class GamePlayer {
                 if (this.getGame().getOpponent(gamePlayer) != null) {
                         return this.getGame().getOpponent(gamePlayer).getSalvos();
                 }
-                return null;
+                return new HashSet<>();
         }
 
         public Set<Salvo> getSalvos() { return salvo; }

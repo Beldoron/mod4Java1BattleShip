@@ -43,7 +43,7 @@ public class SalvoApplication {
 			Player player1 = new Player("jack@gmx.de",  "1234");
 			Player player2 = new Player("bauer@gmx.de",  "wetter");
 			Player player3 = new Player("jan@gmx.de",  "miau");
-			Player player4 = new Player("j.bauer@ctu.gov",  "24");
+			Player player4 = new Player("sting@ctu.gov",  "24");
 
 
 			Date date = new Date();
@@ -52,14 +52,27 @@ public class SalvoApplication {
 
 
 			GamePlayer readyPlayerOne = new GamePlayer(date);
-			GamePlayer readyPlayerTwo = new GamePlayer(date);
+			GamePlayer readyPlayerTwo = new GamePlayer(dateTwo);
 			GamePlayer readyPlayerThree = new GamePlayer(date);
 			GamePlayer readyPlayerFour = new GamePlayer(date);
-
-
+			GamePlayer readyPlayerFive = new GamePlayer(date);
+			GamePlayer readyPlayerSix = new GamePlayer(date);
+			GamePlayer readyPlayerSeven = new GamePlayer(date);
+			GamePlayer readyPlayerEight = new GamePlayer(date);
+			GamePlayer readyPlayerNein = new GamePlayer(date);
+			GamePlayer readyPlayerTen = new GamePlayer(date);
+			GamePlayer readyPlayerEleven = new GamePlayer(date);
+			GamePlayer readyPlayerTwelf = new GamePlayer(date);
+			GamePlayer readyPlayerThirhteen = new GamePlayer(date);
+			GamePlayer readyPlayerFourteen = new GamePlayer(date);
 
 			Game gameOne = new Game(date);
 			Game gameTwo = new Game(dateTwo);
+			Game gameThree = new Game(date);
+			Game gameFour = new Game(date);
+			Game gameFive = new Game(date);
+			Game gameSix = new Game(date);
+			Game gameSeven = new Game(date);
 			//Game gameThree = new Game(date);
 			// nur creationdateDate und Score, player in scores relation
 
@@ -97,17 +110,34 @@ public class SalvoApplication {
 
 			player1.addGamePlayer(readyPlayerOne);
 			player3.addGamePlayer(readyPlayerTwo);
+			player1.addGamePlayer(readyPlayerThree);
+			player3.addGamePlayer(readyPlayerFour);
+			player3.addGamePlayer(readyPlayerFive);
+			player3.addGamePlayer(readyPlayerSix);
+			player1.addGamePlayer(readyPlayerSeven);
+			player2.addGamePlayer(readyPlayerEight);
+			player4.addGamePlayer(readyPlayerNein);
+			player2.addGamePlayer(readyPlayerTen);
+			player2.addGamePlayer(readyPlayerEleven);
+			player1.addGamePlayer(readyPlayerTwelf);
+			player1.addGamePlayer(readyPlayerThirhteen);
+			player3.addGamePlayer(readyPlayerFourteen);
+
 
 			gameOne.addGamePlayer(readyPlayerOne);
 			gameOne.addGamePlayer(readyPlayerTwo);
-
-
-			player2.addGamePlayer(readyPlayerFour);
-			player3.addGamePlayer(readyPlayerThree);
-
 			gameTwo.addGamePlayer(readyPlayerFour);
 			gameTwo.addGamePlayer(readyPlayerThree);
-
+			gameThree.addGamePlayer(readyPlayerFive);
+			//gameThree.addGamePlayer(readyPlayerSix);
+			gameFour.addGamePlayer(readyPlayerSeven);
+			gameFour.addGamePlayer(readyPlayerEight);
+			gameFive.addGamePlayer(readyPlayerNein);
+			gameFive.addGamePlayer(readyPlayerTen);
+			gameSix.addGamePlayer(readyPlayerEleven);
+			gameSix.addGamePlayer(readyPlayerTwelf);
+			gameSeven.addGamePlayer(readyPlayerThirhteen);
+			//gameSeven.addGamePlayer(readyPlayerFourteen);
 
 			List<String> location1 = Arrays.asList("E1", "F2", "G3", "H4", "I5" );
 			List<String> location2 = Arrays.asList("B1", "B2", "B3");
@@ -168,7 +198,11 @@ public class SalvoApplication {
 
 			repositoryGame.save(gameOne);
 			repositoryGame.save(gameTwo);
-
+			repositoryGame.save(gameThree);
+			repositoryGame.save(gameFour);
+			repositoryGame.save(gameFive);
+			repositoryGame.save(gameSix);
+			repositoryGame.save(gameSeven);
 			//repositoryGame.save(new Game(dateTwo));
 			//repositoryGame.save(new Game(dateThree));
 
@@ -181,6 +215,16 @@ public class SalvoApplication {
 			gamePlayerRepository.save(readyPlayerTwo);
 			gamePlayerRepository.save(readyPlayerThree);
 			gamePlayerRepository.save(readyPlayerFour);
+			gamePlayerRepository.save(readyPlayerFive);
+			gamePlayerRepository.save(readyPlayerSix);
+			gamePlayerRepository.save(readyPlayerSeven);
+			gamePlayerRepository.save(readyPlayerEight);
+			gamePlayerRepository.save(readyPlayerNein);
+			gamePlayerRepository.save(readyPlayerTen);
+			gamePlayerRepository.save(readyPlayerEleven);
+			gamePlayerRepository.save(readyPlayerTwelf);
+			gamePlayerRepository.save(readyPlayerThirhteen);
+			gamePlayerRepository.save(readyPlayerFourteen);
 
 			shipRepository.save(destroyer);
 			shipRepository.save(destroyerTwo);

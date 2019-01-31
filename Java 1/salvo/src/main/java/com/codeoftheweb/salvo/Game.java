@@ -71,6 +71,13 @@ public class Game {
         return id;
     }
 
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
 
     public Set<Player> getPlayers() {
         Set<Player> playersSet = new HashSet<>();

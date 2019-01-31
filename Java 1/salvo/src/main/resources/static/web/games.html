@@ -12,10 +12,10 @@
 <h1>Battle Ships</h1>
     <div id="myAuthentication" style="display:none" class=" w3-display-topright">
 
-        <div><button  style="margin-left:16px;" class="w3-button w3-container w3-cell w3-light-green w3-round-large"  onclick="logout()">Logout</button></div>
+        <div> <button  style="margin-left:16px;" class="w3-button w3-container w3-cell w3-light-green w3-round-large"  onclick="logout()">Logout</button></div>
+        <div id="active_name"></div>
     </div>
 </div>
-
 
 
 
@@ -30,13 +30,13 @@
 
 </div>
 
-
-
+<div id="createGame" style="display:none"><button  style="margin-left:16px;"  class="w3-button w3-container w3-cell w3-light-green w3-round-large"  onclick="newGame()">new Game</button>
+</div>
 <div style="margin-top:50px;" class="w3-table w3-margin-left">
 
     <table class="w3-border w3-striped">
-        <tr class="w3-light-green"><th></th><th>Game Number</th><th></th><th>Player</th></tr>
-        <tbody id="myTable"></tbody>
+        <tr class="w3-light-green" >
+        <tbody id="myTable" ></tbody>
     </table>
     <br>
 </div>

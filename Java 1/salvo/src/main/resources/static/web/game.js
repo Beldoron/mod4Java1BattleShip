@@ -23,7 +23,6 @@ fetch(final)
 .then(result => {
     console.log(result)
     data = result
-    console.log(data.ships[0].ship_location)
     insertShips(data.ships);
     insertSalvosOpponents(data.salvoesOpponents);
     insertSalvos(data.salvoes);
@@ -34,19 +33,19 @@ fetch(final)
 fetching();
 
 function fetching () {
-fetch('http://localhost:8080/api/games')
+fetch('/api/games')
 .then(result => result.json())
 .then(result => {
     console.log(result)
     userInfo = result
-    myLogin(userInfo);
+    // myLogin(userInfo);
 
 });
 }
 
 function logout() {
 
-  fetch('http://localhost:8080/api/logout', {
+  fetch('/api/logout', {
        credentials:'include',
       headers: {
       "Accept": "application/json",
@@ -56,7 +55,7 @@ function logout() {
       body: ""
     }).then(result =>  {
         console.log(result)
-        window.location.assign("http://localhost:8080/web/games.html");
+        window.location.assign("/web/games.html");
 
         return})
 }
@@ -71,9 +70,9 @@ window.location.assign("http://localhost:8080/web/games.html");
 
 
 
-function myLogin(element){
-document.getElementById('myLogin').innerHTML = element.Active_User.userName;
-}
+// function myLogin(element){
+// document.getElementById('myLogin').innerHTML = element.Active_User.userName;
+// }
 
 function reload() {
 location.reload();
@@ -84,12 +83,15 @@ function parseNames(data) {
 
 console.log(data);
 //var obj = JSON.parse(data);
-console.log(data.gameplayers[0].player.User_name)
-console.log(data.gameplayers[1].player.User_name)
-
-document.getElementById("you").innerHTML = data.gameplayers[0].player.User_name ;  // + data.gameplayers.player.User_name  ;
-document.getElementById("theother").innerHTML = data.gameplayers[1].player.User_name ;
-
+// console.log(data.gameplayers[0].player.User_name)
+// console.log(data.gameplayers[1].player.User_name)
+if (data.gameplayers.length == 1){
+    document.getElementById("you").innerHTML = data.gameplayers[0].player.User_name ;  // + data.gameplayers.player.User_name  ;
+    
+    } else {
+        document.getElementById("you").innerHTML = data.gameplayers[0].player.User_name ;  // + data.gameplayers.player.User_name  ;
+        document.getElementById("theother").innerHTML = data.gameplayers[1].player.User_name ;
+    }
 }
 
 function createTable(tableId) {
@@ -145,17 +147,18 @@ console.log(urlParams[1]);
 
 function insertShips(ships) {
 
-    console.log(ships[0].ship_location.length + " test0")
-    console.log(ships[1].ship_location[0]) //A1
-    console.log(ships[1].ship_location[1]) //A2
-    console.log(ships[1].ship_location[2]) //A3
-    console.log(ships.length + " test 1")
+    
+    // console.log(ships[1].ship_location[0]) //A1
+    // console.log(ships[1].ship_location[1]) //A2
+    // console.log(ships[1].ship_location[2]) //A3
+    // console.log(ships.length + " test 1")
 
 
-
+    if(ships != null){
     for (let i = 0; i < ships.length; i++) { //2
          for (let n = 0; n < ships[i].ship_location.length; n++) { //3
                  document.getElementsByClassName(ships[i].ship_location[n])[0].classList.add("blue")
+                } 
          }
     }
 }
