@@ -43,6 +43,49 @@ fetch('/api/games')
 });
 }
 
+function postShips(gpid) {
+    // var ships = [
+    //     { 
+    //     shipType: "Fregatte",
+    //     location: ["A1", "B1", "C1"]
+    // },
+    // {
+    //     shipType: "Destroyer",
+    //     location: ["H5", "H6"]
+    // }];
+    const ships = [
+        {
+            shipType: "AAA",
+            location: ["B2", "B3"]
+        },{            
+            shipType: "BBB",
+            location: ["F2", "F3"]
+        }]
+
+    console.log(ships)
+    console.log(JSON.stringify(ships))
+
+    fetch("/api/games/players/15/ships", {
+        credentials:"include",
+        headers: {
+            "Accept": "application/json",
+            "Content-Type": "application/json"
+        },
+        method: 'POST',
+        body: JSON.stringify(ships)
+      })
+      .then(result =>  {
+          console.log(result)
+          if (result.ok) {
+            console.log(result)
+            return result.json()
+        } 
+        throw Error("big error")
+        })
+  .then(json => console.log(json))
+  .catch(err => console.log(err))
+}  
+
 function logout() {
 
   fetch('/api/logout', {
@@ -156,15 +199,15 @@ function insertShips(ships) {
 
     if(ships != null){
     for (let i = 0; i < ships.length; i++) { //2
-         for (let n = 0; n < ships[i].ship_location.length; n++) { //3
-                 document.getElementsByClassName(ships[i].ship_location[n])[0].classList.add("blue")
+         for (let n = 0; n < ships[i].location.length; n++) { //3
+                 document.getElementsByClassName(ships[i].location[n])[0].classList.add("blue")
                 } 
          }
     }
 }
 
 function createTableTwo(tableId) {
-
+            
             let rows = [" ", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10"];
             let columns = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J"]
             let table = document.getElementById(tableId);

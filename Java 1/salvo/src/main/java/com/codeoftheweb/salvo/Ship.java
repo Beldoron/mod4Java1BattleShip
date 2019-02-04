@@ -17,11 +17,10 @@ public class Ship {
     @GenericGenerator(name = "native", strategy = "native")
     private long id;
 
-
     private String shipType;
 
     @ElementCollection
-    @Column(name = "locations")
+    @Column(name = "location")
     private List<String> location = new ArrayList<>();
 
     @JsonIgnore
@@ -34,8 +33,6 @@ public class Ship {
     public Ship(String shipType, List<String> location) {
         this.shipType = shipType;
         this.location = location;
-
-
     }
 
     public GamePlayer getGamePlayer() {
@@ -70,6 +67,9 @@ public class Ship {
         this.location = location;
     }
 
-
+    @Override
+    public String toString() {
+        return "shipType: " + this.shipType + " / " + this.location;
+    }
 }
 

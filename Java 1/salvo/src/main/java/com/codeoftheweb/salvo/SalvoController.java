@@ -5,10 +5,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 import org.springframework.security.core.Authentication;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -27,6 +24,8 @@ public class SalvoController {
     private GamePlayerRepository gamePlayerRepository;
     @Autowired
     private PlayerRepository playerRepository;
+    @Autowired
+    private ShipRepository shipRepository;
 
 
     public Boolean userLoggedIn (Authentication authentication) {
@@ -239,8 +238,8 @@ public class SalvoController {
 
     private Map<String, Object> shipsMap(Ship ship) {
         Map<String, Object> shipsmap = new LinkedHashMap<String, Object>();
-        shipsmap.put("ship_type", ship.getShiptype());
-        shipsmap.put("ship_location", ship.getLocation());
+        shipsmap.put("shipType", ship.getShiptype());
+        shipsmap.put("location", ship.getLocation());
         return shipsmap;
     }
 
@@ -264,11 +263,141 @@ public class SalvoController {
         System.out.println(salvoes);
         return salvoes.stream().map(salvo-> salvoesMap(salvo)).collect(toList());
     }
+
+
+    //An Unauthorized response should be sent if
+
+
+
+
+
+
+    // Otherwise, the ships should be added to the game player and saved, and a Created response should be sent.
+
+    @RequestMapping(path = "/games/players/{gpid}/ships", method = RequestMethod.POST)
+    public ResponseEntity<Map<String, Object>> placeShips(@PathVariable Long gpid,
+                                                          @RequestBody List<Ship> shipList,
+                                                          Authentication authentication) {
+        GamePlayer currentPlayer = gamePlayerRepository.findById(gpid);
+        Integer shipsLength = currentPlayer.getShips().size();
+        // no current user logged in
+        if (currentPlayer == null) {
+            return new ResponseEntity<>(information("ERROR", "No current user is logged in"), HttpStatus.UNAUTHORIZED);
+        }
+        // no game player with the given ID
+        if (!userLoggedIn(authentication)) {
+            return new ResponseEntity<>(information("ERROR", "Not the right Game Player"), HttpStatus.UNAUTHORIZED);
+        }
+        // a Forbidden response should be sent if the user already has ships placed.
+        if (shipsLength > 0) {
+            return new ResponseEntity<>(information("ERROR", "Ships have already been placed"), HttpStatus.FORBIDDEN);
+        }
+        System.out.println(shipList);
+        shipList.forEach(ship -> {
+            System.out.println(ship.toString());
+            System.out.println(ship.getShiptype());
+
+            currentPlayer.addShip(ship);
+            shipRepository.save(ship);
+        });
+        return new ResponseEntity<>(information("Success", "The ships have been added successfully"), HttpStatus.CREATED);
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 }
 
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*
+
+@RequestMapping(value = "/games/players/{gpid}/ships", method = RequestMethod.POST)
+    public ResponseEntity<Map<String, Object>> placeShips(@PathVariable long gpid, @RequestBody List<Ship> newShipsList, Authentication authentication) {
+        List<Integer> sizeList = new ArrayList<>();
+        List<String> locCheck = new ArrayList<>();
+        for (Ship ship : newShipsList) {
+            sizeList.add(ship.getLocation().size());
+        }
+        if (!userLoggedIn(authentication)) {
+            return new ResponseEntity<>(information("Error", "please login"), HttpStatus.UNAUTHORIZED);
+        } else if (gamePlayerRepository.findById(gpid) == null) {
+            return new ResponseEntity<>(information("Error", "game doesn't exist"), HttpStatus.UNAUTHORIZED);
+        } else if (gamePlayerRepository.findById(gpid).getPlayer() != currentUser(authentication)) {
+            return new ResponseEntity<>(information("Error", "you have no permission to edit other player's ships"), HttpStatus.UNAUTHORIZED);
+        } else if (sizeList.get(0) == 5 && sizeList.get(1) == 4 && sizeList.get(2) == 3 && sizeList.get(3) == 3 && sizeList.get(4) == 2) {
+            for (Ship ship : newShipsList) {
+                for (String loc : ship.getLocation()) {
+                    if (locCheck.contains(loc)) {
+                        return new ResponseEntity<>(information("Error", "you cannot place one ship over the other"), HttpStatus.UNAUTHORIZED);
+                    } else {
+                        locCheck.add(loc);
+                    }
+                }
+            }
+            GamePlayer currentGP = gamePlayerRepository.findById(gpid);
+            for (Ship newShip : newShipsList) {
+                currentGP.addShip(newShip);
+                shipRepository.save(newShip);
+            }
+            return new ResponseEntity<>(information("Success", "the ship was placed"),HttpStatus.CREATED);
+        } else {
+            return new ResponseEntity<>(information("Error", "ships are not in the right size required"), HttpStatus.UNAUTHORIZED);
+        }
+    }
+ */
 
 
 

@@ -21,6 +21,7 @@ import org.springframework.security.web.authentication.logout.HttpStatusReturnin
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
@@ -177,6 +178,8 @@ public class SalvoApplication {
 			Ship destroyerThree = new Ship("Fregatte", location3);
 			Ship destroyerFour = new Ship("Destroyer", location4);
 
+//			Ship aaa = new Ship("AAA", new ArrayList<String>(Arrays.asList("E1","F1")));
+
 			readyPlayerOne.addShip(destroyer);
 			readyPlayerOne.addShip(destroyerTwo);
 
@@ -300,14 +303,14 @@ public class SalvoApplication {
 					.antMatchers("/api/game_view/*").permitAll()
 					.antMatchers("/api/login").permitAll()
 					.antMatchers("/api/players").permitAll()
-					.antMatchers("/web/game.html").hasAuthority("USER")
-					.antMatchers("/web/game.js").hasAuthority("USER")
-					.antMatchers("/web/game.css").hasAuthority("USER")
-					.antMatchers("/api/game_view/*").hasAuthority("USER");
+					//.antMatchers("/web/game.html").hasAuthority("USER")
+					//.antMatchers("/web/game.js").hasAuthority("USER")
+					//.antMatchers("/web/game.css").hasAuthority("USER")
+					//.antMatchers("/api/game_view/*").hasAuthority("USER");
 
 
 
-					//.anyRequest().fullyAuthenticated();
+					.anyRequest().fullyAuthenticated();
 
 			http.formLogin()
 					.usernameParameter("email")
